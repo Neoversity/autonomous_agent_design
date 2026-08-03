@@ -1,0 +1,221 @@
+{
+  "created_at": "2026-08-03T23:21:37.095895+00:00",
+  "runs": [
+    {
+      "test_id": "TC-001",
+      "total_steps": 3,
+      "total_time_ms": 2504,
+      "trajectory": [
+        {
+          "step_number": 1,
+          "node_name": "agent",
+          "input": "content='Скільки електроенергії споживає обігрівач потужністю 2000 Вт за 5 годин?' additional_kwargs={} response_metadata={}",
+          "output": "",
+          "tool_calls": [
+            {
+              "name": "calculate_energy",
+              "args": {
+                "hours": 5,
+                "power_watts": 2000,
+                "devices_count": 1
+              },
+              "id": "4JYid279",
+              "type": "tool_call"
+            }
+          ],
+          "timestamp": "2026-08-03T23:18:51.654620+00:00",
+          "duration_ms": 1510,
+          "elapsed_ms": 1514
+        },
+        {
+          "step_number": 2,
+          "node_name": "tools",
+          "input": "content=[] additional_kwargs={'function_call': {'name': 'calculate_energy', 'arguments': '{\"hours\": 5, \"power_watts\": 2000, \"devices_count\": 1}'}, '__gemini_function_call_thought_signatures__': {'4JYid279': 'EswDCskDARFNMg9CgXAWda7xU5Eo3cD9lpYgUX9nYYnn6jU0Kz67OXgAohAcDl3nd+vc/iddZgxK5DLdJ678fsZGN4XME8gwh/x/aikOp0/S2UgbPsqaWdOICftmZISCD5gWRTMhXuMdoL1Gw0JwODeoE5fkXrCM97GzjfPiH86LG/4joRvvi7+FGpRllwFGpbBk0P9sDChY9WF7CpSEs5vnTa6joO7U9grjcSYU9tczFJhQCMAWW6wCvkmBi8AkGGEribpY/LEQVHN51gG2vszbizYrvbuQYnqm",
+          "output": "['Кількість приладів: 1. Загальна потужність: 2000.00 Вт. Час роботи: 5.00 год. Споживання електроенергії: 10.000 кВт·год.']",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:18:51.657417+00:00",
+          "duration_ms": 1,
+          "elapsed_ms": 1516
+        },
+        {
+          "step_number": 3,
+          "node_name": "agent",
+          "input": "content='Кількість приладів: 1. Загальна потужність: 2000.00 Вт. Час роботи: 5.00 год. Споживання електроенергії: 10.000 кВт·год.' name='calculate_energy' tool_call_id='4JYid279'",
+          "output": "Обігрівач потужністю 2000 Вт (2 кВт) за 5 годин роботи споживає **10 кВт·год** електроенергії.",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:18:52.644230+00:00",
+          "duration_ms": 986,
+          "elapsed_ms": 2503
+        }
+      ]
+    },
+    {
+      "test_id": "TC-002",
+      "total_steps": 3,
+      "total_time_ms": 3531,
+      "trajectory": [
+        {
+          "step_number": 1,
+          "node_name": "agent",
+          "input": "content='Акумулятор має ємність 12 кВт·год, заряд 80%, резерв 10%, навантаження 1000 Вт і ККД 90%. На скільки часу його вистачить?' additional_kwargs={} response_metadata={}",
+          "output": "",
+          "tool_calls": [
+            {
+              "name": "estimate_battery_runtime",
+              "args": {
+                "reserve_soc_percent": 10,
+                "load_watts": 1000,
+                "current_soc_percent": 80,
+                "efficiency_percent": 90,
+                "battery_capacity_kwh": 12
+              },
+              "id": "HeFdi3cm",
+              "type": "tool_call"
+            }
+          ],
+          "timestamp": "2026-08-03T23:18:54.230077+00:00",
+          "duration_ms": 1582,
+          "elapsed_ms": 1584
+        },
+        {
+          "step_number": 2,
+          "node_name": "tools",
+          "input": "content=[] additional_kwargs={'function_call': {'name': 'estimate_battery_runtime', 'arguments': '{\"reserve_soc_percent\": 10, \"load_watts\": 1000, \"current_soc_percent\": 80, \"efficiency_percent\": 90, \"battery_capacity_kwh\": 12}'}, '__gemini_function_call_thought_signatures__': {'HeFdi3cm': 'Eo8FCowFARFNMg/6kc/qBj8WkRn2KifyDAdArYYNWxVvtCGDL74gr0pJMX/DCWVya7M/DXoXU2D/+7eb/Ji7YRiGoIW2K593Whm2J+wEH93KSpiUmD7eAchCs/Tw/BVnwjkihgIHQs6knBArais66JL+nhVeZ6wCjquICWyMGEWnjihTe7N/Pd3r2MoBjBGbX8atwIUaVC5r8nt0u",
+          "output": "['Доступна енергія: 7.560 кВт·год. Навантаження: 1000.00 Вт. Орієнтовний час роботи: 7 год 34 хв.']",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:18:54.232437+00:00",
+          "duration_ms": 1,
+          "elapsed_ms": 1586
+        },
+        {
+          "step_number": 3,
+          "node_name": "agent",
+          "input": "content='Доступна енергія: 7.560 кВт·год. Навантаження: 1000.00 Вт. Орієнтовний час роботи: 7 год 34 хв.' name='estimate_battery_runtime' tool_call_id='HeFdi3cm'",
+          "output": "Акумулятора вистачить приблизно на **7 годин 34 хвилини** (7,56 години).\n\n**Розрахунок:**\n* **Корисна ємність з урахуванням резерву:** від 80% поточного заряду віднімаємо 10% необоротного резерву = 70% доступного заряду від 12 кВт·год (8,4 кВт·год).\n* **З урахуванням ККД 90%:** доступно близько **7,56 кВт·год** корисної енергії.\n* **При навантаженні 1000 Вт (1 кВт):** $7,56 \\text{ кВт·год} / 1 \\text{ кВт} = 7,56 \\text{ годин} \\approx 7 \\text{ год } 34 \\text{ хв}$.",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:18:56.175806+00:00",
+          "duration_ms": 1942,
+          "elapsed_ms": 3530
+        }
+      ]
+    },
+    {
+      "test_id": "TC-003",
+      "total_steps": 3,
+      "total_time_ms": 5697,
+      "trajectory": [
+        {
+          "step_number": 1,
+          "node_name": "agent",
+          "input": "content='Сонячна станція 8 кВт має 5 ефективних сонячних годин і ККД 80%. Будинок споживає 1500 Вт протягом 10 годин. Розрахуй генерацію та споживання і скажи, чи вистачить енергії.' additional_kwargs={} response_metadata={}",
+          "output": "",
+          "tool_calls": [
+            {
+              "name": "calculate_solar_generation",
+              "args": {
+                "peak_sun_hours": 5,
+                "panel_power_kw": 8,
+                "system_efficiency_percent": 80,
+                "days": 1
+              },
+              "id": "ZEvr22vv",
+              "type": "tool_call"
+            },
+            {
+              "name": "calculate_energy",
+              "args": {
+                "power_watts": 1500,
+                "hours": 10,
+                "devices_count": 1
+              },
+              "id": "nmtRO9nb",
+              "type": "tool_call"
+            }
+          ],
+          "timestamp": "2026-08-03T23:21:24.365673+00:00",
+          "duration_ms": 2155,
+          "elapsed_ms": 2164
+        },
+        {
+          "step_number": 2,
+          "node_name": "tools",
+          "input": "content=[] additional_kwargs={'function_call': {'name': 'calculate_energy', 'arguments': '{\"power_watts\": 1500, \"hours\": 10, \"devices_count\": 1}'}, '__gemini_function_call_thought_signatures__': {'ZEvr22vv': 'EsoGCscGARFNMg8mdvZscFtSYvQdBsN7vJAoCX8EX/y5SgfKPKTdc01a+a01BDqtwS67Vb6EVz/E/9hMgo6Jyr2ipQQSsxP2RnQcD7ERJbLcI+7fB2+ClepHSuv+qevUvD8cAN4roFX3/SGuQ1UeTyNuqa0J6tbI2QIl3oAxtM4PhMtyHTF4aIM2VwBZ4b6Y3Uc9cMvt+er/h/jfU5AlFIhpkBRLsWkIchvUo0Xa31qAEaWiJ2l/VCtoKcU2Dv7PNgJ/ascZbRsMSgsS5iPbtnjOg1sXVAq7Yci",
+          "output": "['Добова генерація: 32.000 кВт·год. Період: 1 дн. Загальна генерація: 32.000 кВт·год.', 'Кількість приладів: 1. Загальна потужність: 1500.00 Вт. Час роботи: 10.00 год. Споживання електроенергії: 15.000 кВт·год.']",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:21:24.368765+00:00",
+          "duration_ms": 2,
+          "elapsed_ms": 2167
+        },
+        {
+          "step_number": 3,
+          "node_name": "agent",
+          "input": "content='Кількість приладів: 1. Загальна потужність: 1500.00 Вт. Час роботи: 10.00 год. Споживання електроенергії: 15.000 кВт·год.' name='calculate_energy' tool_call_id='nmtRO9nb'",
+          "output": "За результатами розрахунків:\n\n1. **Генерація сонячної станції:**\n   * Сумарна потужність панелей: 8 кВт\n   * Ефективні сонячні години: 5 год\n   * ККД системи: 80%\n   * **Виробіток за день:** **32 кВт·год**\n\n2. **Споживання будинку:**\n   * Потужність навантаження: 1500 Вт (1.5 кВт)\n   * Тривалість роботи: 10 годин\n   * **Загальне споживання:** **15 кВт·год**\n\n---\n\n### Висновок:\n**Так, згенерованої енергії вистачить із запасом.** \nСонячна станція згенерує 32 кВт·год, тоді як будинок споживає 15 кВ",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:21:27.897235+00:00",
+          "duration_ms": 3527,
+          "elapsed_ms": 5696
+        }
+      ]
+    },
+    {
+      "test_id": "TC-004",
+      "total_steps": 3,
+      "total_time_ms": 9195,
+      "trajectory": [
+        {
+          "step_number": 1,
+          "node_name": "agent",
+          "input": "content='Є інвертор 6 кВт з навантаженням 5400 Вт, акумулятор 12 кВт·год із зарядом 75%, резервом 10%, ККД 92%, а навантаження будинку 2000 Вт. Оціни завантаження інвертора і час роботи акумулятора.' additional_kwargs={} response_metadata={}",
+          "output": "",
+          "tool_calls": [
+            {
+              "name": "check_inverter_load",
+              "args": {
+                "inverter_power_kw": 6,
+                "current_load_watts": 5400
+              },
+              "id": "vb1P9xMA",
+              "type": "tool_call"
+            },
+            {
+              "name": "estimate_battery_runtime",
+              "args": {
+                "reserve_soc_percent": 10,
+                "efficiency_percent": 92,
+                "load_watts": 2000,
+                "battery_capacity_kwh": 12,
+                "current_soc_percent": 75
+              },
+              "id": "snFMcx9Z",
+              "type": "tool_call"
+            }
+          ],
+          "timestamp": "2026-08-03T23:21:29.861716+00:00",
+          "duration_ms": 1961,
+          "elapsed_ms": 1962
+        },
+        {
+          "step_number": 2,
+          "node_name": "tools",
+          "input": "content=[] additional_kwargs={'function_call': {'name': 'estimate_battery_runtime', 'arguments': '{\"reserve_soc_percent\": 10, \"efficiency_percent\": 92, \"load_watts\": 2000, \"battery_capacity_kwh\": 12, \"current_soc_percent\": 75}'}, '__gemini_function_call_thought_signatures__': {'vb1P9xMA': 'EvkFCvYFARFNMg/z+EBglvnCC/uSajcm827CWdWzwkbUE87gXscFScbMWbu/oolAPSFncTsKD8KZnmCsijcSWNdGwpuv8/bMnYHrOsECx3nptxY3aqi5Em6IpN8YsU4vydX7N7rRnKlZWBC8yrlmthOIwBNG+uptvfZpb8Ms/gR15EL0SRPZjZpClfaqpaYkw512VVUoNuavM6if5",
+          "output": "['Завантаження інвертора: 90.0%. Запас номінальної потужності: 600.00 Вт. Статус: високе навантаження.', 'Доступна енергія: 7.176 кВт·год. Навантаження: 2000.00 Вт. Орієнтовний час роботи: 3 год 35 хв.']",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:21:29.864881+00:00",
+          "duration_ms": 2,
+          "elapsed_ms": 1965
+        },
+        {
+          "step_number": 3,
+          "node_name": "agent",
+          "input": "content='Доступна енергія: 7.176 кВт·год. Навантаження: 2000.00 Вт. Орієнтовний час роботи: 3 год 35 хв.' name='estimate_battery_runtime' tool_call_id='snFMcx9Z'",
+          "output": "Ось результати аналізу вашої енергосистеми:\n\n### 1. Завантаження інвертора\n* **Номінальна потужність інвертора:** 6 кВт (6000 Вт)\n* **Поточне навантаження:** 5400 Вт\n* **Рівень завантаження:** **90.0%**\n* **Запас потужності:** **600 Вт**\n* **Статус:** **Високе навантаження.** Інвертор працює близько до своєї максимальної номінальної потужності.\n\n---\n\n### 2. Час автономної роботи від акумулятора\n* **Повна ємність:** 12 кВт·год\n* **Поточний заряд (SOC):** 75%\n* **Мінімальний резерв (Reserve SOC):*",
+          "tool_calls": [],
+          "timestamp": "2026-08-03T23:21:37.093175+00:00",
+          "duration_ms": 7227,
+          "elapsed_ms": 9194
+        }
+      ]
+    }
+  ]
+}
