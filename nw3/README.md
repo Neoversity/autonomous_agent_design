@@ -1,212 +1,184 @@
-EnergyAgent — Практичне завдання №1
+# EnergyAgent — Практичне завдання №1
 
-Опис проєкту
+## Опис проєкту
 
 EnergyAgent — агентна система для аналізу домашньої енергосистеми, побудована на LangGraph.
 
 Система демонструє:
+- доменні tools з Pydantic v2;
+- ReAct-патерн;
+- Plan-and-Execute;
+- checkpointing через SqliteSaver;
+- Agentic RAG з ChromaDB;
+- Human-in-the-Loop для ризикових операцій;
+- pytest-тестування;
+- JSON-логування траєкторії.
 
-доменні tools з Pydantic v2;
-
-ReAct-патерн;
-
-Plan-and-Execute;
-
-checkpointing через SqliteSaver;
-
-Agentic RAG з ChromaDB;
-
-Human-in-the-Loop для ризикових операцій;
-
-pytest-тестування;
-
-JSON-логування траєкторії.
-
-Доменні tools
+## Доменні tools
 
 У проєкті реалізовано такі інструменти:
 
-get_energy_status — отримання поточного стану інвертора;
+1. `get_energy_status` — отримання поточного стану інвертора;
+2. `calculate_safe_load` — розрахунок безпечного додаткового навантаження;
+3. `check_battery_safety` — перевірка безпечності розряду батареї;
+4. `set_inverter_power_limit` — зміна ліміту потужності інвертора;
+5. `search_energy_knowledge` — пошук рекомендацій у ChromaDB.
 
-calculate_safe_load — розрахунок безпечного додаткового навантаження;
-
-check_battery_safety — перевірка безпечності розряду батареї;
-
-set_inverter_power_limit — зміна ліміту потужності інвертора;
-
-search_energy_knowledge — пошук рекомендацій у ChromaDB.
-
-Кожен tool використовує Pydantic v2 схеми з BaseModel, Field та field_validator.
+Кожен tool використовує Pydantic v2 схеми з `BaseModel`, `Field` та `field_validator`.
 
 Результати tools повертаються у JSON-форматі:
 
+```json
 {
   "status": "success",
   "data": {}
 }
+```
 
 або:
 
+```json
 {
   "status": "error",
   "error": "Опис помилки"
 }
+```
 
-ReAct Agent
+## ReAct Agent
 
 ReAct-агент реалізований у LangGraph за схемою:
 
-LLM -> Tools -> LLM
+`LLM -> Tools -> LLM`
 
 Додані захисні механізми:
-
-max_steps = 10;
-
-timeout = 120 секунд;
-
-детекція повторних tool-викликів;
-
-JSON-логування траєкторії.
+- `max_steps = 10`;
+- timeout = 120 секунд;
+- детекція повторних tool-викликів;
+- JSON-логування траєкторії.
 
 Приклад задачі:
 
-Перевір inverter_1 і визнач, скільки додаткового навантаження можна безпечно підключити при резерві 500 Вт.
+> Перевір inverter_1 і визнач, скільки додаткового навантаження можна безпечно підключити при резерві 500 Вт.
 
 Результат:
 
-900 Вт
+`900 Вт`
 
-Plan-and-Execute
+## Plan-and-Execute
 
 Реалізовано окремий LangGraph:
 
-planner -> executor -> replanner
+`planner -> executor -> replanner`
 
 Structured Output реалізований через:
-
-Plan;
-
-ReplanDecision;
-
-with_structured_output().
+- `Plan`;
+- `ReplanDecision`;
+- `with_structured_output()`.
 
 Planner формує послідовність кроків, executor виконує їх через ReAct-агента, а replanner перевіряє прогрес і за необхідності змінює план.
 
-Checkpointing
+## Checkpointing
 
-Для збереження стану використовується SqliteSaver.
+Для збереження стану використовується `SqliteSaver`.
 
 Файл:
 
-energy_agent_checkpoints.sqlite
+`energy_agent_checkpoints.sqlite`
 
 Продемонстровано:
-
-збереження стану між кроками;
-
-get_state();
-
-переривання через interrupt_before;
-
-відновлення виконання через invoke(None, config=...).
+- збереження стану між кроками;
+- `get_state()`;
+- переривання через `interrupt_before`;
+- відновлення виконання через `invoke(None, config=...)`.
 
 Приклад:
 
-10 -> step_one -> 11 -> interrupt -> resume -> step_two -> 22
+`10 -> step_one -> 11 -> interrupt -> resume -> step_two -> 22`
 
-Agentic RAG
+## Agentic RAG
 
 База знань реалізована через ChromaDB.
 
-Кількість документів: 10
+Кількість документів: `10`
 
 RAG tool:
 
-search_energy_knowledge
+`search_energy_knowledge`
 
 Агент самостійно вирішує, коли необхідно звертатися до бази знань.
 
 Приклад:
 
-Який мінімальний SOC батареї рекомендується?
+> Який мінімальний SOC батареї рекомендується?
 
 Agentic RAG знаходить правило про рекомендований мінімальний SOC 20%.
 
-Human-in-the-Loop
+## Human-in-the-Loop
 
 Ризиковим інструментом є:
 
-set_inverter_power_limit
+`set_inverter_power_limit`
 
 Перед виконанням використовується:
 
-interrupt_before=["execute_change"]
+`interrupt_before=["execute_change"]`
 
 Продемонстровано два сценарії.
 
-Approve
+### Approve
 
 Зміна ліміту:
 
-6000 W -> 5000 W
+`6000 W -> 5000 W`
 
-Reject
+### Reject
 
-Запит на зміну до 4000 W був відхилений.
+Запит на зміну до `4000 W` був відхилений.
 
 Після відхилення фактичний ліміт залишився:
 
-5000 W
+`5000 W`
 
-Тестування
+## Тестування
 
 Тести запускаються командою:
 
+```bash
 pytest -v test_energy_agent.py
+```
 
 Результат:
 
-11 passed
+`11 passed`
 
 Тести охоплюють:
+- Pydantic validation;
+- некоректні параметри;
+- domain tools;
+- базові компоненти ReAct-агента.
 
-Pydantic validation;
+## Основні файли
 
-некоректні параметри;
+- `Task_001_Бабенко_EnergyAgent.ipynb`
+- `energy_agent_core.py`
+- `test_energy_agent.py`
+- `trajectory.json`
+- `energy_agent_checkpoints.sqlite`
+- `README.md`
 
-domain tools;
+## Запуск
 
-базові компоненти ReAct-агента.
+1. Відкрити notebook у Google Colab.
+2. Встановити необхідні залежності.
+3. Додати `GOOGLE_API_KEY` у Colab Secrets.
+4. Запускати комірки послідовно.
+5. Для перевірки тестів виконати:
 
-Основні файли
-
-Task_001_Бабенко_EnergyAgent.ipynb
-
-energy_agent_core.py
-
-test_energy_agent.py
-
-trajectory.json
-
-energy_agent_checkpoints.sqlite
-
-README.md
-
-Запуск
-
-Відкрити notebook у Google Colab.
-
-Встановити необхідні залежності.
-
-Додати GOOGLE_API_KEY у Colab Secrets.
-
-Запускати комірки послідовно.
-
-Для перевірки тестів виконати:
-
+```bash
 pytest -v test_energy_agent.py
+```
 
-Висновок
+## Висновок
 
 У межах практичної роботи реалізовано повний цикл побудови автономної агентної системи: від формалізованих tools і ReAct-циклу до Plan-and-Execute, persistence, Agentic RAG та Human-in-the-Loop.
 
