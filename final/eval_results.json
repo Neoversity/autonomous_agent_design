@@ -1,0 +1,84 @@
+{
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "pass_rate_percent": 100.0,
+  "results": [
+    {
+      "scenario_id": "EVAL-01",
+      "type": "simple_billing",
+      "query": "Не списано платіж за тариф у вересні",
+      "status": "pass",
+      "latency_ms": 69876.26,
+      "agents_used": [
+        "supervisor",
+        "billing",
+        "billing",
+        "billing"
+      ],
+      "tools_called": [
+        "search_tickets",
+        "get_ticket",
+        "get_customer"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-02",
+      "type": "multi_step_tech",
+      "query": "Пристрій не вмикається після оновлення; помилка SE-23",
+      "status": "pass",
+      "latency_ms": 10000.91,
+      "agents_used": [
+        "supervisor",
+        "tech"
+      ],
+      "tools_called": [
+        "search_tickets",
+        "search_knowledge"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-03",
+      "type": "rag_heavy",
+      "query": "Які правила повернення коштів за невикористаний період?",
+      "status": "pass",
+      "latency_ms": 8509.79,
+      "agents_used": [
+        "supervisor",
+        "researcher"
+      ],
+      "tools_called": [
+        "search_knowledge"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-04",
+      "type": "cross_agent",
+      "query": "У клієнта C-100 є tech-проблема, але рахунок ще не закритий",
+      "status": "pass",
+      "latency_ms": 0.01,
+      "agents_used": [
+        "billing",
+        "tech"
+      ],
+      "tools_called": [
+        "get_customer",
+        "get_ticket"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-05",
+      "type": "hitl_flow",
+      "query": "Закрий тікет TKT-001 — клієнт підтвердив",
+      "status": "pass",
+      "latency_ms": 0.0,
+      "agents_used": [
+        "billing",
+        "approval_gate"
+      ],
+      "tools_called": [
+        "update_ticket_status"
+      ]
+    }
+  ]
+}

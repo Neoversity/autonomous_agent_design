@@ -1,0 +1,55 @@
+{
+  "created_at": "2026-08-27T19:42:26.096818+00:00",
+  "run_id": "demo-billing-1",
+  "current_agent": "billing",
+  "completed": true,
+  "step_count": 4,
+  "trajectory": [
+    {
+      "agent_name": "supervisor",
+      "node": "route",
+      "action": "Не списано платіж за тариф у вересні",
+      "output": "billing: The user's query is regarding an uncollected tariff payment for September, which falls under billing, charges, and payments.",
+      "tools": [],
+      "metadata": {},
+      "timestamp": "2026-08-27T19:40:29.543622+00:00",
+      "timestamp_unix": 1787859629.5436418
+    },
+    {
+      "agent_name": "billing",
+      "node": "planner",
+      "action": "Не списано платіж за тариф у вересні",
+      "output": "['Знайти відповідні тікети щодо проблеми з платежем за вересень за допомогою search_tickets.', 'Отримати детальну інформацію про тікет за допомогою get_ticket.', 'Перевірити дані та статус клієнта за допомогою get_customer.']",
+      "tools": [],
+      "metadata": {},
+      "timestamp": "2026-08-27T19:40:39.022519+00:00",
+      "timestamp_unix": 1787859639.022539
+    },
+    {
+      "agent_name": "billing",
+      "node": "executor",
+      "action": "execute billing plan",
+      "output": "['search_tickets: {\"count\": 2, \"tickets\": [{\"id\": \"TKT-001\", \"customer_id\": \"C-100\", \"subject\": \"Не списано платіж\", \"status\": \"open\", \"priority\": \"high\", \"category\": \"billing\"}, {\"id\": \"TKT-003\", \"customer_id\": \"C-102\", \"subject\": \"Повернення коштів\", \"status\": \"open\", \"priority\": \"low\", \"category\": \"billing\"}]}', 'get_ticket(TKT-001): {\"id\": \"TKT-001\", \"customer_id\": \"C-100\", \"subject\": \"Не списано платіж\", \"status\": \"open\", \"priority\": \"high\", \"category\": \"billing\"}', 'get_customer(C-100): {\"id\": \"C-100\", \"name\": \"Олег Петренко\", \"tier\": \"gold\", \"email\": \"oleh@example.com\"}']",
+      "tools": [
+        "search_tickets",
+        "get_ticket",
+        "get_customer"
+      ],
+      "metadata": {},
+      "timestamp": "2026-08-27T19:40:39.022551+00:00",
+      "timestamp_unix": 1787859639.0225556
+    },
+    {
+      "agent_name": "billing",
+      "node": "finalizer",
+      "action": "compose final answer",
+      "output": "Знайдено відповідний відкритий тікет щодо проблеми з несписаним платежем за тариф:\n\n* **ID тікета:** TKT-001\n* **Клієнт:** Олег Петренко (ID: C-100)\n* **Тема:** Не списано платіж\n* **Статус:** open (високий пріоритет)\n\nЗаявку прийнято в обробку.",
+      "tools": [],
+      "metadata": {
+        "elapsed_sec": 9.478
+      },
+      "timestamp": "2026-08-27T19:40:39.022564+00:00",
+      "timestamp_unix": 1787859639.0225677
+    }
+  ]
+}
